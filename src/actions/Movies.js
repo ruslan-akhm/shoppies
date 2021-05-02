@@ -4,6 +4,7 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
   ADD_NOMINEE,
+  REMOVE_NOMINEE,
 } from "./Types";
 
 const key = "7f58ee09"; //API key for OMDB
@@ -38,7 +39,9 @@ export const getData = async (dispatch, payload) => {
 };
 
 export const nominateMovie = (dispatch, payload) => {
-  //console.log(payload);
-
   dispatch({ type: ADD_NOMINEE, payload: { movie: payload.movie } });
+};
+
+export const removeNominee = (dispatch, payload) => {
+  dispatch({ type: REMOVE_NOMINEE, payload: { movie: payload.movie } });
 };

@@ -27,15 +27,6 @@ function MoviesBox(props) {
   };
 
   const nominate = e => {
-    const alreadyNominated = nominated.filter(movie => {
-      return movie.imdbID == e.imdbID;
-    });
-    console.log(alreadyNominated);
-    if (alreadyNominated.length > 0) {
-      //IN FACT SHOULD DISABLE BUTTON (IN STATE - update searchResult)
-      return console.log("ALREADY NOMINATED");
-    }
-
     nominateMovie(dispatch, { movie: e });
   };
 
@@ -48,9 +39,16 @@ function MoviesBox(props) {
               <Typography>{movie.Title}</Typography>
               <Typography>{movie.Year}</Typography>
               <img src={movie.Poster == "N/A" ? defaultPoster : movie.Poster} />
-              <Button variant="contained" onClick={e => nominate(movie)}>
+              <Button
+                variant="contained"
+                onClick={e => nominate(movie)}
+                disabled={movie.nominated ? true : false}
+              >
                 Nominate
               </Button>
+              {movie.nominated ? (
+                <Typography>You have nominated this movie</Typography>
+              ) : null}
             </Grid>
           );
         })}

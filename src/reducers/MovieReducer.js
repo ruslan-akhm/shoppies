@@ -3,6 +3,7 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
   ADD_NOMINEE,
+  REMOVE_NOMINEE,
 } from "../actions/Types";
 
 export const initialState = {
@@ -43,11 +44,30 @@ export const MovieReducer = (state = initialState, action) => {
       };
 
     case ADD_NOMINEE:
-      console.log(state.searchResult);
-      //disable "nominate" button
+      const updatedSearchResult = state.searchResult.map(movie => {
+        movie.nominated =
+          movie.imdbID === payload.movie.imdbID ? true : movie.nominated;
+        return movie;
+      });
       return {
         ...state,
+        searchResult: updatedSearchResult,
         nominated: state.nominated.concat(payload.movie),
+      };
+
+    case REMOVE_NOMINEE:
+      const updatedNominated = state.nominated.filter(movie => {
+        return movie.imdbID !== payload.movie.imdbID;
+      });
+      const updatedSearch = state.searchResult.map(movie => {
+        movie.nominated =
+          movie.imdbID === payload.movie.imdbID ? false : movie.nominated;
+        return movie;
+      });
+      return {
+        ...state,
+        searchResult: updatedSearch,
+        nominated: updatedNominated,
       };
 
     default:
