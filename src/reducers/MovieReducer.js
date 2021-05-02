@@ -2,6 +2,7 @@ import {
   LOAD_DATA,
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
+  LOAD_NEXT_PAGE,
   ADD_NOMINEE,
   REMOVE_NOMINEE,
 } from "../actions/Types";
@@ -32,8 +33,10 @@ export const MovieReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         searchQuery: payload.searchQuery,
-        searchResult: state.searchResult.concat(payload.movies),
-        moviesShown: state.moviesShown + payload.movies.length,
+        searchResult: payload.movies, //state.searchResult.concat(),
+        //add LOAD_NEXT_PAGE
+        //remove concat from here
+        moviesShown: payload.movies.length, //state.moviesShown +
         totalResults: payload.totalResults,
       };
     case LOAD_DATA_FAILURE:
@@ -41,6 +44,16 @@ export const MovieReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
+      };
+
+    case LOAD_NEXT_PAGE:
+      return {
+        ...state,
+        loading: false,
+        //searchQuery: payload.searchQuery,
+        searchResult: state.searchResult.concat(payload.movies),
+        moviesShown: state.moviesShown + payload.movies.length,
+        //totalResults: payload.totalResults,
       };
 
     case ADD_NOMINEE:

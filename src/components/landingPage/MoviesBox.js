@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
 } from "../../context/MovieContext";
-import { getData, nominateMovie } from "../../actions/Movies";
+import { getData, loadNextPage, nominateMovie } from "../../actions/Movies";
 import defaultPoster from "../../img/defaultPoster.png";
 
 import { Grid, Typography, Button } from "@material-ui/core";
@@ -19,8 +19,16 @@ function MoviesBox(props) {
     nominated,
   } = useContext(MovieStateContext);
 
+  useEffect(() => {
+    if (nominated.length === 5) {
+      console.log("MAX REACHED");
+      //need to update state here and show pop-up modal
+      //can  not nominate any more movies - message on every click on "Nominate" button
+    }
+  }, [nominated]);
+
   const loadMore = () => {
-    getData(dispatch, {
+    loadNextPage(dispatch, {
       moviesShown: moviesShown,
       searchQuery: searchQuery,
     });
