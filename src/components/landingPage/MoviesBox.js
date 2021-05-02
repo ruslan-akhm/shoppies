@@ -8,9 +8,60 @@ import { loadNextPage, nominateMovie } from "../../actions/Movies";
 import ModalBox from "./ModalBox";
 import defaultPoster from "../../img/defaultPoster.png";
 
-import { Grid, Typography, Button } from "@material-ui/core";
+import { makeStyles, Grid, Typography, Button, Link } from "@material-ui/core";
+import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
+
+const useStyles = makeStyles(theme => ({
+  bottomMessage: {
+    border: "1px solid red",
+    width: "100%",
+    textAlign: "center",
+    paddingTop: theme.spacing(1),
+    color: theme.palette.green.main,
+  },
+  boxTitle: {
+    width: "auto",
+    padding: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    textAlign: "center",
+    border: "1px solid red",
+  },
+  cardInfo: {
+    padding: theme.spacing(2),
+  },
+  cardTitle: {
+    height: "fit-content",
+    border: "1px solid red",
+  },
+  link: {
+    border: "1px solid red",
+    width: "fit-content",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "18px",
+    fontWeight: "600",
+  },
+  moviesBox: {
+    padding: theme.spacing(3),
+  },
+  movieCard: {
+    marginBottom: theme.spacing(3),
+  },
+  nominateButton: {
+    marginTop: "auto",
+  },
+  poster: {
+    width: "100%",
+    height: "100%",
+    minHeight: "180px",
+    objectFit: "cover",
+  },
+}));
 
 function MoviesBox(props) {
+  const classes = useStyles();
   const { setMaxReachedModal } = useContext(UserContext);
   const dispatch = useContext(MovieDispatchContext);
   const {
@@ -42,23 +93,62 @@ function MoviesBox(props) {
   };
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" className={classes.moviesBox}>
+      <Typography className={classes.boxTitle}>
+        Results for: {searchQuery}
+      </Typography>
       {searchResult &&
         searchResult.map((movie, index) => {
           return (
-            <Grid item key={index} style={{ border: "1px solid red" }}>
-              <Typography>{movie.Title}</Typography>
-              <Typography>{movie.Year}</Typography>
-              <img src={movie.Poster == "N/A" ? defaultPoster : movie.Poster} />
-              <Button
-                variant="contained"
-                onClick={e => nominate(movie)}
-                disabled={movie.nominated ? true : false}
+            <Grid
+              item
+              container
+              key={index}
+              className={classes.movieCard}
+              direction="row"
+              lg={12}
+              md={12}
+              style={{ border: "1px solid red" }}
+            >
+              <Grid item lg={3} md={3}>
+                <img
+                  className={classes.poster}
+                  src={movie.Poster == "N/A" ? defaultPoster : movie.Poster}
+                />{" "}
+              </Grid>
+              <Grid
+                item
+                container
+                direction="column"
+                lg={9}
+                md={9}
+                className={classes.cardInfo}
               >
-                Nominate
-              </Button>
+                <Typography className={classes.cardTitle}>
+                  {movie.Title} ({movie.Year})
+                </Typography>
+                <Link
+                  href={"https://www.imdb.com/title/" + movie.imdbID}
+                  target="_blank"
+                  rel="noopener"
+                  className={classes.link}
+                >
+                  imdb <OpenInNewIcon fontSize="inherit" />
+                </Link>
+                <Button
+                  variant="contained"
+                  onClick={e => nominate(movie)}
+                  disabled={movie.nominated ? true : false}
+                  className={classes.nominateButton}
+                >
+                  Nominate
+                </Button>
+              </Grid>
               {movie.nominated ? (
-                <Typography>You have nominated this movie</Typography>
+                <Typography className={classes.bottomMessage}>
+                  You have nominated this movie{" "}
+                  <DoneOutlineOutlinedIcon fontSize="inherit" />
+                </Typography>
               ) : null}
             </Grid>
           );
@@ -69,13 +159,7 @@ function MoviesBox(props) {
         ) : null}
       </Grid>
       {loading && <Typography>LOADING</Typography>}
-      {error ? (
-        searchQuery.length === 0 ? (
-          <Typography>Type in movie name, for example "Rush Hour"</Typography>
-        ) : (
-          <Typography>Try narrowing down the search</Typography>
-        )
-      ) : null}
+
       <ModalBox />
     </Grid>
   );

@@ -17,6 +17,8 @@ export const initialState = {
   nominated: [],
 };
 
+//INSTEAD OF ADDING "NOMINATED" to searchResult -> need to compare every new search result with current nominees list
+
 export const MovieReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
@@ -29,17 +31,30 @@ export const MovieReducer = (state = initialState, action) => {
       };
 
     case LOAD_DATA_SUCCESS:
+      //checking to see if we have a movie in nominees list and updating movie.nominated parameter correspondingly
+      const nominatedIds =
+        state.nominated &&
+        state.nominated.map(movie => {
+          return movie.imdbID;
+        });
+      const moviesWithNominees =
+        nominatedIds &&
+        payload.movies.map(movie => {
+          movie.nominated = nominatedIds.includes(movie.imdbID)
+            ? true
+            : movie.nominated;
+          return movie;
+        });
       return {
         ...state,
         loading: false,
         error: false,
         searchQuery: payload.searchQuery,
-        searchResult: payload.movies, //state.searchResult.concat(),
-        //add LOAD_NEXT_PAGE
-        //remove concat from here
+        searchResult: moviesWithNominees,
         moviesShown: payload.movies.length, //state.moviesShown +
         totalResults: payload.totalResults,
       };
+
     case LOAD_DATA_FAILURE:
       return {
         ...state,
