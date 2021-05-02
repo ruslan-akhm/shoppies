@@ -32,6 +32,7 @@ export const MovieReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        error: false,
         searchQuery: payload.searchQuery,
         searchResult: payload.movies, //state.searchResult.concat(),
         //add LOAD_NEXT_PAGE
@@ -44,6 +45,10 @@ export const MovieReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
+        searchQuery: payload.searchQuery,
+        searchResult: [],
+        moviesShown: 0,
+        totalResults: 0,
       };
 
     case LOAD_NEXT_PAGE:

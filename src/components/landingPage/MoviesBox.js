@@ -1,17 +1,21 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
 } from "../../context/MovieContext";
-import { getData, loadNextPage, nominateMovie } from "../../actions/Movies";
+import { UserContext } from "../../context/UserContext";
+import { loadNextPage, nominateMovie } from "../../actions/Movies";
+import ModalBox from "./ModalBox";
 import defaultPoster from "../../img/defaultPoster.png";
 
 import { Grid, Typography, Button } from "@material-ui/core";
 
 function MoviesBox(props) {
+  const { setMaxReachedModal } = useContext(UserContext);
   const dispatch = useContext(MovieDispatchContext);
   const {
     loading,
+    error,
     searchQuery,
     searchResult,
     totalResults,
@@ -20,11 +24,7 @@ function MoviesBox(props) {
   } = useContext(MovieStateContext);
 
   useEffect(() => {
-    if (nominated.length === 5) {
-      console.log("MAX REACHED");
-      //need to update state here and show pop-up modal
-      //can  not nominate any more movies - message on every click on "Nominate" button
-    }
+    nominated.length === 5 && setMaxReachedModal(true);
   }, [nominated]);
 
   const loadMore = () => {
@@ -35,6 +35,9 @@ function MoviesBox(props) {
   };
 
   const nominate = e => {
+    if (nominated.length === 5) {
+      return setMaxReachedModal(true);
+    }
     nominateMovie(dispatch, { movie: e });
   };
 
@@ -66,6 +69,14 @@ function MoviesBox(props) {
         ) : null}
       </Grid>
       {loading && <Typography>LOADING</Typography>}
+      {error ? (
+        searchQuery.length === 0 ? (
+          <Typography>Type in movie name, for example "Rush Hour"</Typography>
+        ) : (
+          <Typography>Try narrowing down the search</Typography>
+        )
+      ) : null}
+      <ModalBox />
     </Grid>
   );
 }

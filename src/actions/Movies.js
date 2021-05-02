@@ -12,14 +12,23 @@ const key = "7f58ee09"; //API key for OMDB
 
 export const getData = async (dispatch, payload) => {
   try {
+    console.log(payload);
     dispatch({ type: LOAD_DATA });
     const response = await axios.get(
-      `http://www.omdbapi.com/?s=${payload.searchQuery}&apikey=${key}`
+      `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&apikey=${key}`
     );
+    //console.log(response);
     //if there are no movies found
-    if (response.data.reponse === "False") {
-      return dispatch({ type: LOAD_DATA_FAILURE });
+    if (response.data.Response === "False") {
+      return dispatch({
+        type: LOAD_DATA_FAILURE,
+        payload: {
+          searchQuery: payload.searchQuery,
+        },
+      });
     }
+    //console.log(response.data.response);
+
     return dispatch({
       type: LOAD_DATA_SUCCESS,
       payload: {
@@ -39,7 +48,7 @@ export const loadNextPage = async (dispatch, payload) => {
   //to load next page our "page" query param would be (payload.moviesShown/10 + 1)
   try {
     const response = await axios.get(
-      `http://www.omdbapi.com/?s=${payload.searchQuery}&page=${
+      `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
         payload.moviesShown / 10 + 1
       }&apikey=${key}`
     );
