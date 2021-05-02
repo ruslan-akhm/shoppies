@@ -2,15 +2,17 @@ import {
   LOAD_DATA,
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
+  ADD_NOMINEE,
 } from "../actions/Types";
 
 export const initialState = {
   loading: false,
   error: false,
-  searchResult: null,
-  moviesShown: null,
-  totalResults: null,
-  nominated: null,
+  searchQuery: null,
+  searchResult: [],
+  moviesShown: 0,
+  totalResults: 0,
+  nominated: [],
 };
 
 export const MovieReducer = (state = initialState, action) => {
@@ -28,8 +30,9 @@ export const MovieReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        searchResult: payload.movies,
-        moviesShown: payload.movies.length,
+        searchQuery: payload.searchQuery,
+        searchResult: state.searchResult.concat(payload.movies),
+        moviesShown: state.moviesShown + payload.movies.length,
         totalResults: payload.totalResults,
       };
     case LOAD_DATA_FAILURE:
@@ -37,6 +40,14 @@ export const MovieReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
+      };
+
+    case ADD_NOMINEE:
+      console.log(state.searchResult);
+      //disable "nominate" button
+      return {
+        ...state,
+        nominated: state.nominated.concat(payload.movie),
       };
 
     default:

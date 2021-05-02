@@ -13,7 +13,7 @@ function SearchBar() {
     if (!input || input.length === 0) return;
     //replace spaces with dashes to make search return correct results
     const movie = input.replace(/\s/g, "-");
-    getData(dispatch, movie);
+    getData(dispatch, { searchQuery: movie });
   };
 
   return (
