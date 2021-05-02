@@ -1,32 +1,19 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { MovieDispatchContext } from "../../context/MovieContext";
-import { GET_DATA } from "../../actions/Types";
+import { getData } from "../../actions/Movies";
 
 import { Box, TextField, Button } from "@material-ui/core";
-import axios from "axios";
 
-const key = "7f58ee09"; //API key for OMDB
-
-function SearchBar(props) {
+function SearchBar() {
   const [input, setInput] = useState();
   const dispatch = useContext(MovieDispatchContext);
 
   const handleSubmit = () => {
-    //if input filed is empty - return
+    //if input field is empty - return
     if (!input || input.length === 0) return;
-
+    //replace spaces with dashes to make search return correct results
     const movie = input.replace(/\s/g, "-");
-    const getMovies = async () => {
-      const response = await axios.get(
-        `http://www.omdbapi.com/?s=${movie}&apikey=${key}`
-      );
-      if (response.data.reponse === "False") {
-        console.log("TRY OTHER MOVIE TITLE");
-      }
-      dispatch({ type: GET_DATA, payload: { movies: response.data.Search } });
-      //if response.data.reponse === "False" - error message
-    };
-    getMovies();
+    getData(dispatch, movie);
   };
 
   return (
