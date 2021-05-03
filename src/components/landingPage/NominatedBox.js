@@ -6,8 +6,7 @@ import {
 import { removeNominee } from "../../actions/Movies";
 import defaultPoster from "../../img/defaultPoster.png";
 
-import { makeStyles, Grid, Typography, Button } from "@material-ui/core";
-import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
+import { makeStyles, Grid, Typography, Button, Fade } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   boxTitle: {
@@ -15,17 +14,26 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     marginBottom: theme.spacing(1),
     textAlign: "center",
-    border: "1px solid red",
+    backgroundColor: theme.palette.solidGray.main,
+    color: "#fff",
   },
   cardInfo: {
     padding: theme.spacing(2),
   },
   cardTitle: {
     height: "fit-content",
-    border: "1px solid red",
+    //border: "1px solid red",
+    color: "#fff",
+  },
+  message: {
+    width: "100%",
+    textAlign: "center",
+    color: theme.palette.lightGray.main,
+    marginTop: theme.spacing(2),
   },
   movieCard: {
     marginBottom: theme.spacing(3),
+    border: `1px solid ${theme.palette.solidGray.main}`,
   },
   nominatedBox: {
     padding: theme.spacing(3),
@@ -33,6 +41,7 @@ const useStyles = makeStyles(theme => ({
   poster: {
     width: "100%",
     height: "100%",
+    maxHeight: "320px",
     minHeight: "180px",
     objectFit: "cover",
   },
@@ -50,54 +59,55 @@ function NominatedBox(props) {
     removeNominee(dispatch, { movie: e });
   };
   return (
-    <Grid
-      container
-      style={{ border: "1px solid green" }}
-      direction="column"
-      className={classes.nominatedBox}
-    >
+    <Grid container direction="column" className={classes.nominatedBox}>
       <Typography className={classes.boxTitle}>Nominees</Typography>
-      {nominated &&
+      {nominated.length > 0 ? (
         nominated.map((movie, index) => {
           return (
-            <Grid
-              item
-              container
-              key={index}
-              className={classes.movieCard}
-              direction="row"
-              lg={12}
-              md={12}
-              style={{ border: "1px solid red" }}
-            >
-              <Grid item lg={3} md={3}>
-                <img
-                  className={classes.poster}
-                  src={movie.Poster == "N/A" ? defaultPoster : movie.Poster}
-                />{" "}
-              </Grid>
+            <Fade key={index} in={index >= 0}>
               <Grid
                 item
                 container
-                direction="column"
-                lg={9}
-                md={9}
-                className={classes.cardInfo}
+                className={classes.movieCard}
+                direction="row"
+                lg={12}
+                md={12}
               >
-                <Typography className={classes.cardTitle}>
-                  {movie.Title} ({movie.Year})
-                </Typography>
-                <Button
-                  variant="contained"
-                  onClick={e => remove(movie)}
-                  className={classes.removeButton}
+                <Grid item lg={3} md={3}>
+                  <img
+                    className={classes.poster}
+                    src={movie.Poster == "N/A" ? defaultPoster : movie.Poster}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  lg={9}
+                  md={9}
+                  className={classes.cardInfo}
                 >
-                  Remove
-                </Button>
+                  <Typography className={classes.cardTitle} variant="h5">
+                    {movie.Title} ({movie.Year})
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={e => remove(movie)}
+                    className={classes.removeButton}
+                  >
+                    Remove
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
+            </Fade>
           );
-        })}
+        })
+      ) : (
+        <Typography className={classes.message}>
+          You haven't nominated any movies yet...
+        </Typography>
+      )}
     </Grid>
   );
 }

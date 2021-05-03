@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
@@ -8,13 +8,22 @@ import { loadNextPage, nominateMovie } from "../../actions/Movies";
 import ModalBox from "./ModalBox";
 import defaultPoster from "../../img/defaultPoster.png";
 
-import { makeStyles, Grid, Typography, Button, Link } from "@material-ui/core";
+import {
+  makeStyles,
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Link,
+  Fade,
+  CircularProgress,
+} from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
 
 const useStyles = makeStyles(theme => ({
   bottomMessage: {
-    border: "1px solid red",
+    //border: "1px solid red",
     width: "100%",
     textAlign: "center",
     paddingTop: theme.spacing(1),
@@ -25,17 +34,16 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     marginBottom: theme.spacing(1),
     textAlign: "center",
-    border: "1px solid red",
+    backgroundColor: theme.palette.solidGray.main,
+    color: "#fff",
   },
   cardInfo: {
     padding: theme.spacing(2),
   },
   cardTitle: {
     height: "fit-content",
-    border: "1px solid red",
   },
   link: {
-    border: "1px solid red",
     width: "fit-content",
     display: "flex",
     justifyContent: "center",
@@ -43,11 +51,25 @@ const useStyles = makeStyles(theme => ({
     fontSize: "18px",
     fontWeight: "600",
   },
+  loadingBox: {
+    width: "100%",
+    height: "50vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  message: {
+    width: "100%",
+    textAlign: "center",
+    color: theme.palette.lightGray.main,
+    marginTop: theme.spacing(2),
+  },
   moviesBox: {
     padding: theme.spacing(3),
   },
   movieCard: {
     marginBottom: theme.spacing(3),
+    border: `1px solid ${theme.palette.solidGray.main}`,
   },
   nominateButton: {
     marginTop: "auto",
@@ -55,6 +77,7 @@ const useStyles = makeStyles(theme => ({
   poster: {
     width: "100%",
     height: "100%",
+    maxHeight: "300px",
     minHeight: "180px",
     objectFit: "cover",
   },
@@ -100,57 +123,60 @@ function MoviesBox(props) {
       {searchResult &&
         searchResult.map((movie, index) => {
           return (
-            <Grid
-              item
-              container
-              key={index}
-              className={classes.movieCard}
-              direction="row"
-              lg={12}
-              md={12}
-              style={{ border: "1px solid red" }}
-            >
-              <Grid item lg={3} md={3}>
-                <img
-                  className={classes.poster}
-                  src={movie.Poster == "N/A" ? defaultPoster : movie.Poster}
-                />{" "}
-              </Grid>
+            <Fade in={index >= 0} key={movie.imdbID}>
               <Grid
                 item
                 container
-                direction="column"
-                lg={9}
-                md={9}
-                className={classes.cardInfo}
+                //key={index}
+                className={classes.movieCard}
+                direction="row"
+                lg={12}
+                md={12}
               >
-                <Typography className={classes.cardTitle}>
-                  {movie.Title} ({movie.Year})
-                </Typography>
-                <Link
-                  href={"https://www.imdb.com/title/" + movie.imdbID}
-                  target="_blank"
-                  rel="noopener"
-                  className={classes.link}
+                <Grid item lg={3} md={3}>
+                  <img
+                    className={classes.poster}
+                    src={movie.Poster == "N/A" ? defaultPoster : movie.Poster}
+                    alt={movie.Title + " poster"}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  lg={9}
+                  md={9}
+                  className={classes.cardInfo}
                 >
-                  imdb <OpenInNewIcon fontSize="inherit" />
-                </Link>
-                <Button
-                  variant="contained"
-                  onClick={e => nominate(movie)}
-                  disabled={movie.nominated ? true : false}
-                  className={classes.nominateButton}
-                >
-                  Nominate
-                </Button>
+                  <Typography className={classes.cardTitle} variant="h5">
+                    {movie.Title} ({movie.Year})
+                  </Typography>
+                  <Link
+                    href={"https://www.imdb.com/title/" + movie.imdbID}
+                    target="_blank"
+                    rel="noopener"
+                    className={classes.link}
+                  >
+                    imdb <OpenInNewIcon fontSize="inherit" />
+                  </Link>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={e => nominate(movie)}
+                    disabled={movie.nominated ? true : false}
+                    className={classes.nominateButton}
+                  >
+                    Nominate
+                  </Button>
+                </Grid>
+                {movie.nominated ? (
+                  <Typography className={classes.bottomMessage}>
+                    You have nominated this movie{" "}
+                    <DoneOutlineOutlinedIcon fontSize="inherit" />
+                  </Typography>
+                ) : null}
               </Grid>
-              {movie.nominated ? (
-                <Typography className={classes.bottomMessage}>
-                  You have nominated this movie{" "}
-                  <DoneOutlineOutlinedIcon fontSize="inherit" />
-                </Typography>
-              ) : null}
-            </Grid>
+            </Fade>
           );
         })}
       <Grid item>
@@ -158,8 +184,16 @@ function MoviesBox(props) {
           <Button onClick={loadMore}>Load more</Button>
         ) : null}
       </Grid>
-      {loading && <Typography>LOADING</Typography>}
-
+      {loading && (
+        <Box className={classes.loadingBox}>
+          <CircularProgress color="primary" />
+        </Box>
+      )}
+      {error && searchQuery.length !== 0 ? (
+        <Typography className={classes.message}>
+          Try narrowing down the search
+        </Typography>
+      ) : null}
       <ModalBox />
     </Grid>
   );

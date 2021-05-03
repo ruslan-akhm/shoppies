@@ -10,7 +10,9 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   landing: {
+    minHeight: "100vh",
     padding: "5vh",
+    backgroundColor: theme.palette.background.main,
   },
 }));
 

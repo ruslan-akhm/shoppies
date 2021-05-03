@@ -17,8 +17,6 @@ export const initialState = {
   nominated: [],
 };
 
-//INSTEAD OF ADDING "NOMINATED" to searchResult -> need to compare every new search result with current nominees list
-
 export const MovieReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
@@ -51,7 +49,7 @@ export const MovieReducer = (state = initialState, action) => {
         error: false,
         searchQuery: payload.searchQuery,
         searchResult: moviesWithNominees,
-        moviesShown: payload.movies.length, //state.moviesShown +
+        moviesShown: payload.movies.length, 
         totalResults: payload.totalResults,
       };
 
@@ -70,10 +68,8 @@ export const MovieReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        //searchQuery: payload.searchQuery,
         searchResult: state.searchResult.concat(payload.movies),
         moviesShown: state.moviesShown + payload.movies.length,
-        //totalResults: payload.totalResults,
       };
 
     case ADD_NOMINEE:

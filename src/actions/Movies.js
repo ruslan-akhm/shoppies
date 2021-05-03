@@ -19,7 +19,6 @@ export const getData = async (dispatch, payload) => {
     const response = await axios.get(
       `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
     );
-    //console.log(response);
     //if there are no movies found
     if (response.data.Response === "False") {
       return dispatch({
@@ -29,7 +28,6 @@ export const getData = async (dispatch, payload) => {
         },
       });
     }
-    //console.log(response.data.response);
 
     return dispatch({
       type: LOAD_DATA_SUCCESS,
