@@ -26,6 +26,9 @@ export const MovieReducer = (state = initialState, action) => {
         ...state,
         loading: true,
         error: false,
+        searchResult: [],
+        moviesShown: 0,
+        totalResults: 0,
       };
 
     case LOAD_DATA_SUCCESS:
@@ -49,7 +52,7 @@ export const MovieReducer = (state = initialState, action) => {
         error: false,
         searchQuery: payload.searchQuery,
         searchResult: moviesWithNominees,
-        moviesShown: payload.movies.length, 
+        moviesShown: payload.movies.length,
         totalResults: payload.totalResults,
       };
 

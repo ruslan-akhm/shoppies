@@ -15,7 +15,6 @@ export const getData = async (dispatch, payload) => {
     dispatch({ type: LOAD_DATA });
     //replace spaces with dashes in order to get correct results
     const movie = payload.searchQuery.replace(/\s/g, "-");
-
     const response = await axios.get(
       `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
     );

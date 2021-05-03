@@ -30,8 +30,9 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.green.main,
   },
   boxTitle: {
-    width: "auto",
-    padding: theme.spacing(1),
+    width: "100%",
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
     marginBottom: theme.spacing(1),
     textAlign: "center",
     backgroundColor: theme.palette.solidGray.main,
@@ -51,6 +52,12 @@ const useStyles = makeStyles(theme => ({
     fontSize: "18px",
     fontWeight: "600",
   },
+  //UPDATE HOVER OF THIS BTN
+  loadButton: {
+    //border: "1px solid red",
+    backgroundColor: theme.palette.solidGray.main,
+    color: "#fff",
+  },
   loadingBox: {
     width: "100%",
     height: "50vh",
@@ -66,6 +73,7 @@ const useStyles = makeStyles(theme => ({
   },
   moviesBox: {
     padding: theme.spacing(3),
+    // border: "1px solid red",
   },
   movieCard: {
     marginBottom: theme.spacing(3),
@@ -116,7 +124,12 @@ function MoviesBox(props) {
   };
 
   return (
-    <Grid container direction="column" className={classes.moviesBox}>
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      className={classes.moviesBox}
+    >
       <Typography className={classes.boxTitle}>
         Results for: {searchQuery}
       </Typography>
@@ -181,7 +194,13 @@ function MoviesBox(props) {
         })}
       <Grid item>
         {totalResults && +totalResults > moviesShown ? (
-          <Button onClick={loadMore}>Load more</Button>
+          <Button
+            onClick={loadMore}
+            className={classes.loadButton}
+            variant="contained"
+          >
+            Load more
+          </Button>
         ) : null}
       </Grid>
       {loading && (

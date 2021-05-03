@@ -11,7 +11,8 @@ import { makeStyles, Grid, Typography, Button, Fade } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   boxTitle: {
     width: "auto",
-    padding: theme.spacing(1),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
     marginBottom: theme.spacing(1),
     textAlign: "center",
     backgroundColor: theme.palette.solidGray.main,

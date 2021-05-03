@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import {
-  //MovieStateContext,
+  MovieStateContext,
   MovieDispatchContext,
 } from "../../context/MovieContext";
 import { getData } from "../../actions/Movies";
+import { LOAD_DATA } from "../../actions/Types";
 
 import {
   makeStyles,
@@ -33,11 +34,19 @@ const useStyles = makeStyles(theme => ({
 function SearchBar() {
   const classes = useStyles();
   const dispatch = useContext(MovieDispatchContext);
-  //const { error, searchQuery } = useContext(MovieStateContext);
+  const { loading } = useContext(MovieStateContext);
 
   const search = e => {
     e.preventDefault();
-    getData(dispatch, { searchQuery: e.target.value });
+    //show loading if user still typing
+    if (!loading) {
+      dispatch({ type: LOAD_DATA });
+    }
+    //setting up timer to prevent unnecessary lookups while user still typing
+    clearTimeout(window.inputTimer);
+    window.inputTimer = setTimeout(() => {
+      return getData(dispatch, { searchQuery: e.target.value });
+    }, 350);
   };
 
   return (
