@@ -16,7 +16,5 @@ export const theme = createMuiTheme({
     gray: { main: "#666262" },
     solidGray: { main: "#242323" },
     green: { main: "#00D555" },
-    orange: { main: "#e69e22" },
-    red: { main: "#e63819" },
   },
 });

@@ -4,7 +4,7 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
   LOAD_PAGE,
-  LOAD_NEXT_PAGE,
+  LOAD_NEXT_PAGE_SUCCESS,
   ADD_NOMINEE,
   REMOVE_NOMINEE,
 } from "./Types";
@@ -56,7 +56,7 @@ export const loadNextPage = async (dispatch, payload) => {
       }&apikey=${key}`
     );
     return dispatch({
-      type: LOAD_NEXT_PAGE,
+      type: LOAD_NEXT_PAGE_SUCCESS,
       payload: {
         movies: response.data.Search,
       },

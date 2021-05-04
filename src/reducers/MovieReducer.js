@@ -3,7 +3,7 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
   LOAD_PAGE,
-  LOAD_NEXT_PAGE,
+  LOAD_NEXT_PAGE_SUCCESS,
   ADD_NOMINEE,
   REMOVE_NOMINEE,
 } from "../actions/Types";
@@ -74,7 +74,7 @@ export const MovieReducer = (state = initialState, action) => {
         loading: true,
       };
 
-    case LOAD_NEXT_PAGE:
+    case LOAD_NEXT_PAGE_SUCCESS:
       return {
         ...state,
         loading: false,

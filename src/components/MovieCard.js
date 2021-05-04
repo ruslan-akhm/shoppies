@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   cardTitle: {
     height: "fit-content",
+    color: "#fff",
   },
   link: {
     width: "fit-content",

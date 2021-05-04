@@ -6,7 +6,6 @@ import {
 import { UserContext } from "../../context/UserContext";
 import { loadNextPage } from "../../actions/Movies";
 import ModalBox from "./ModalBox";
-//import defaultPoster from "../../img/defaultPoster.png";
 
 import {
   makeStyles,
@@ -14,21 +13,11 @@ import {
   Box,
   Typography,
   Button,
-  //Link,
-  //Fade,
   CircularProgress,
 } from "@material-ui/core";
-//import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-//import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
 import MovieCard from "../MovieCard";
 
 const useStyles = makeStyles(theme => ({
-  // bottomMessage: {
-  //   width: "100%",
-  //   textAlign: "center",
-  //   paddingTop: theme.spacing(1),
-  //   color: theme.palette.green.main,
-  // },
   boxTitle: {
     width: "100%",
     paddingTop: theme.spacing(1),
@@ -38,20 +27,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.solidGray.main,
     color: "#fff",
   },
-  // cardInfo: {
-  //   padding: theme.spacing(2),
-  // },
-  // cardTitle: {
-  //   height: "fit-content",
-  // },
-  // link: {
-  //   width: "fit-content",
-  //   display: "flex",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   fontSize: "18px",
-  //   fontWeight: "600",
-  // },
   loadButton: {
     backgroundColor: theme.palette.solidGray.main,
     color: "#fff",
@@ -79,20 +54,6 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(1),
     },
   },
-  // movieCard: {
-  //   marginBottom: theme.spacing(3),
-  //   border: `1px solid ${theme.palette.solidGray.main}`,
-  // },
-  // nominateButton: {
-  //   marginTop: "auto",
-  // },
-  // poster: {
-  //   width: "100%",
-  //   height: "100%",
-  //   maxHeight: "300px",
-  //   minHeight: "180px",
-  //   objectFit: "cover",
-  // },
 }));
 
 function MoviesBox(props) {
@@ -119,68 +80,6 @@ function MoviesBox(props) {
       searchQuery: searchQuery,
     });
   };
-
-  // const nominate = e => {
-  //   if (nominated.length === 5) {
-  //     return setMaxReachedModal(true);
-  //   }
-  //   nominateMovie(dispatch, { movie: e });
-  // };
-
-  // <Fade in={index >= 0} key={movie.imdbID}>
-  //   <Grid
-  //     item
-  //     container
-  //     className={classes.movieCard}
-  //     direction="row"
-  //     lg={12}
-  //     md={12}
-  //   >
-  //     <Grid item lg={3} md={3} sm={4}>
-  //       <img
-  //         className={classes.poster}
-  //         src={movie.Poster == "N/A" ? defaultPoster : movie.Poster}
-  //         alt={movie.Title + " poster"}
-  //       />
-  //     </Grid>
-  //     <Grid
-  //       item
-  //       container
-  //       direction="column"
-  //       lg={9}
-  //       md={9}
-  //       sm={8}
-  //       className={classes.cardInfo}
-  //     >
-  //       <Typography className={classes.cardTitle} variant="h5">
-  //         {movie.Title} ({movie.Year})
-  //       </Typography>
-  //       <Link
-  //         href={"https://www.imdb.com/title/" + movie.imdbID}
-  //         target="_blank"
-  //         rel="noopener"
-  //         className={classes.link}
-  //       >
-  //         imdb <OpenInNewIcon fontSize="inherit" />
-  //       </Link>
-  //       <Button
-  //         variant="contained"
-  //         color="primary"
-  //         onClick={e => nominate(movie)}
-  //         disabled={movie.nominated ? true : false}
-  //         className={classes.nominateButton}
-  //       >
-  //         Nominate
-  //       </Button>
-  //     </Grid>
-  //     {movie.nominated ? (
-  //       <Typography className={classes.bottomMessage}>
-  //         You have nominated this movie{" "}
-  //         <DoneOutlineOutlinedIcon fontSize="inherit" />
-  //       </Typography>
-  //     ) : null}
-  //   </Grid>
-  // </Fade>
 
   return (
     <Grid
