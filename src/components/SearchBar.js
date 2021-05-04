@@ -2,20 +2,17 @@ import { useContext } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
-} from "../../context/MovieContext";
-import { getData } from "../../actions/Movies";
-import { LOAD_DATA } from "../../actions/Types";
+} from "../context/MovieContext";
+import { getData } from "../actions/Movies";
+import { LOAD_DATA } from "../actions/Types";
 
-import {
-  makeStyles,
-  Box,
-  TextField,
-  InputAdornment,
-  //Typography,
-} from "@material-ui/core";
+import { makeStyles, Box, TextField, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles(theme => ({
+  icon: {
+    fill: "#fff",
+  },
   inputField: {
     width: "100%",
     color: "#fff",
@@ -42,7 +39,7 @@ function SearchBar() {
     if (!loading) {
       dispatch({ type: LOAD_DATA });
     }
-    //setting up timer to prevent unnecessary lookups while user still typing
+    //setting up timer to prevent unnecessary lookups while user is still typing
     clearTimeout(window.inputTimer);
     window.inputTimer = setTimeout(() => {
       return getData(dispatch, { searchQuery: e.target.value });
@@ -59,7 +56,7 @@ function SearchBar() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon style={{ fill: "#fff" }} />
+              <SearchIcon className={classes.icon} />
             </InputAdornment>
           ),
           className: classes.inputField,

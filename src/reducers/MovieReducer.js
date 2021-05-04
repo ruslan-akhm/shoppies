@@ -2,6 +2,7 @@ import {
   LOAD_DATA,
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
+  LOAD_PAGE,
   LOAD_NEXT_PAGE,
   ADD_NOMINEE,
   REMOVE_NOMINEE,
@@ -67,6 +68,12 @@ export const MovieReducer = (state = initialState, action) => {
         totalResults: 0,
       };
 
+    case LOAD_PAGE:
+      return {
+        ...state,
+        loading: true,
+      };
+
     case LOAD_NEXT_PAGE:
       return {
         ...state,
@@ -76,6 +83,7 @@ export const MovieReducer = (state = initialState, action) => {
       };
 
     case ADD_NOMINEE:
+      //checking to see if we have a movie in nominees list and updating movie.nominated parameter correspondingly
       const updatedSearchResult = state.searchResult.map(movie => {
         movie.nominated =
           movie.imdbID === payload.movie.imdbID ? true : movie.nominated;

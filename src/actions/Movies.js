@@ -3,6 +3,7 @@ import {
   LOAD_DATA,
   LOAD_DATA_SUCCESS,
   LOAD_DATA_FAILURE,
+  LOAD_PAGE,
   LOAD_NEXT_PAGE,
   ADD_NOMINEE,
   REMOVE_NOMINEE,
@@ -46,7 +47,9 @@ export const loadNextPage = async (dispatch, payload) => {
   //therefore current page is number of movies shown divided by ten (payload.moviesShown/10)
   //to load next page our "page" query param would be (payload.moviesShown/10 + 1)
   try {
-    //const movie = payload.searchQuery.replace(/\s/g, "-");
+    dispatch({
+      type: LOAD_PAGE,
+    });
     const response = await axios.get(
       `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
         payload.moviesShown / 10 + 1
@@ -55,9 +58,7 @@ export const loadNextPage = async (dispatch, payload) => {
     return dispatch({
       type: LOAD_NEXT_PAGE,
       payload: {
-        //searchQuery: payload.searchQuery,
         movies: response.data.Search,
-        //totalResults: response.data.totalResults,
       },
     });
   } catch (err) {
