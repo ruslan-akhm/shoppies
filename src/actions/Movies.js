@@ -1,4 +1,5 @@
 import axios from "axios";
+import { QueryClient } from "react-query";
 import {
   LOAD_DATA,
   LOAD_DATA_SUCCESS,
@@ -9,18 +10,41 @@ import {
   REMOVE_NOMINEE,
 } from "./Types";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
+
 const key = "7f58ee09"; //API key for OMDB
 
 export const getData = async (dispatch, payload) => {
   try {
     dispatch({ type: LOAD_DATA });
-    //replace spaces with dashes in order to get correct results
+    // replace spaces with dashes in order to get correct results
     const movie = payload.searchQuery.replace(/\s/g, "-");
-    const response = await axios.get(
-      `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
+    //Saving fetched data in cache for 5min
+    const data = await queryClient.fetchQuery(
+      movie,
+      async () => {
+        try {
+          const resp = await axios.get(
+            `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
+          );
+          return resp;
+        } catch (err) {
+          return console.log(err);
+        }
+      },
+      {
+        staleTime: 300000, //5 min
+      }
     );
+
     //if there are no movies found
-    if (response.data.Response === "False") {
+    if (data.data.Response === "False") {
       return dispatch({
         type: LOAD_DATA_FAILURE,
         payload: {
@@ -33,8 +57,8 @@ export const getData = async (dispatch, payload) => {
       type: LOAD_DATA_SUCCESS,
       payload: {
         searchQuery: payload.searchQuery,
-        movies: response.data.Search,
-        totalResults: response.data.totalResults,
+        movies: data.data.Search,
+        totalResults: data.data.totalResults,
       },
     });
   } catch (err) {
@@ -50,15 +74,31 @@ export const loadNextPage = async (dispatch, payload) => {
     dispatch({
       type: LOAD_PAGE,
     });
-    const response = await axios.get(
-      `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
-        payload.moviesShown / 10 + 1
-      }&apikey=${key}`
+    //Saving fetched data in cache for 5min
+    const queryKey = payload.searchQuery + (payload.moviesShown / 10 + 1); //unique key for every page
+    const data = await queryClient.fetchQuery(
+      queryKey,
+      async () => {
+        try {
+          const resp = await axios.get(
+            `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
+              payload.moviesShown / 10 + 1
+            }&apikey=${key}`
+          );
+          return resp;
+        } catch (err) {
+          return console.log(err);
+        }
+      },
+      {
+        staleTime: 300000, // 5 min
+      }
     );
+
     return dispatch({
       type: LOAD_NEXT_PAGE_SUCCESS,
       payload: {
-        movies: response.data.Search,
+        movies: data.data.Search,
       },
     });
   } catch (err) {

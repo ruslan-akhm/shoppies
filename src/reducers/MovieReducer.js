@@ -15,7 +15,9 @@ export const initialState = {
   searchResult: [],
   moviesShown: 0,
   totalResults: 0,
-  nominated: [],
+  nominated: JSON.parse(localStorage.getItem("nominatedMovies"))
+    ? JSON.parse(localStorage.getItem("nominatedMovies"))
+    : [],
 };
 
 export const MovieReducer = (state = initialState, action) => {
@@ -23,6 +25,8 @@ export const MovieReducer = (state = initialState, action) => {
 
   switch (type) {
     case LOAD_DATA:
+      //clearing searchResult, moviesShown and totalResults because if we load data - it means user is typing other
+      //movie title in the search bar, so we are clearing current state
       return {
         ...state,
         loading: true,
@@ -89,6 +93,10 @@ export const MovieReducer = (state = initialState, action) => {
           movie.imdbID === payload.movie.imdbID ? true : movie.nominated;
         return movie;
       });
+      localStorage.setItem(
+        "nominatedMovies",
+        JSON.stringify(state.nominated.concat(payload.movie))
+      );
       return {
         ...state,
         searchResult: updatedSearchResult,
@@ -104,6 +112,7 @@ export const MovieReducer = (state = initialState, action) => {
           movie.imdbID === payload.movie.imdbID ? false : movie.nominated;
         return movie;
       });
+      localStorage.setItem("nominatedMovies", JSON.stringify(updatedNominated));
       return {
         ...state,
         searchResult: updatedSearch,

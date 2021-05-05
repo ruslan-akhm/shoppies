@@ -9,10 +9,10 @@ export const theme = createMuiTheme({
     },
   },
   palette: {
-    primary: { main: "#1975e6" }, //#0346F2
+    primary: { main: "#1975e6" },
     secondary: { main: "#e63819" },
-    background: { main: "#474241" }, //"#F6F7FB"
-    lightGray: { main: "#a39b99" }, //
+    background: { main: "#474241" },
+    lightGray: { main: "#a39b99" },
     gray: { main: "#666262" },
     solidGray: { main: "#242323" },
     green: { main: "#00D555" },

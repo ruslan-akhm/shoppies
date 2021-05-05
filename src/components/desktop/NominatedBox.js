@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
 function NominatedBox(props) {
   const classes = useStyles();
   const { nominated } = useContext(MovieStateContext);
-
+  let x = JSON.parse(localStorage.getItem("nominatedMovies")); //localStorage.getItem("nominatedMovies");
+  console.log(x);
   return (
     <Grid
       container

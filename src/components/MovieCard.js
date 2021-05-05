@@ -64,6 +64,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down("sm")]: {
       maxHeight: "320px",
       height: "320px",
+      objectPosition: "top",
     },
   },
 }));

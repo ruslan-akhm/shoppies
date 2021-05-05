@@ -10,6 +10,7 @@ import {
   DialogActions,
   Button,
   IconButton,
+  Slide,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -33,6 +34,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function ModalBox(props) {
   const classes = useStyles();
   const { maxReachedModal, setMaxReachedModal } = useContext(UserContext);
@@ -42,6 +47,7 @@ function ModalBox(props) {
       aria-labelledby="dialog-title"
       open={maxReachedModal}
       className={classes.dialog}
+      TransitionComponent={Transition}
     >
       <DialogTitle id="dialog-title">
         Maximum nominees
