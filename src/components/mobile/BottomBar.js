@@ -1,4 +1,8 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
+import CameraRollIcon from "@material-ui/icons/CameraRoll";
+import { MovieStateContext } from "../../context/MovieContext";
+import { UserContext } from "../../context/UserContext";
+
 import {
   makeStyles,
   BottomNavigation,
@@ -6,9 +10,6 @@ import {
   Badge,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import CameraRollIcon from "@material-ui/icons/CameraRoll";
-import { MovieStateContext } from "../../context/MovieContext";
-import { UserContext } from "../../context/UserContext";
 
 const useStyles = makeStyles(theme => ({
   bottomBar: {
@@ -20,6 +21,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.solidGray.main,
   },
   icon: {
+    fill: theme.palette.lightGray.main,
+  },
+  iconActive: {
     fill: "#fff",
   },
 }));
@@ -27,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 function BottomBar(props) {
   const classes = useStyles();
   const [badgeShown, setBadgeShown] = useState(false);
-  const { setInView } = useContext(UserContext);
+  const { inView, setInView } = useContext(UserContext);
   const { nominated } = useContext(MovieStateContext);
   const nominatedRef = useRef(nominated.length);
 
@@ -45,7 +49,13 @@ function BottomBar(props) {
         className={classes.action}
         label="Search"
         value="search"
-        icon={<SearchIcon className={classes.icon} />}
+        icon={
+          <SearchIcon
+            className={
+              inView === "MoviesBox" ? classes.iconActive : classes.icon
+            }
+          />
+        }
         style={{ minWidth: "50%", maxWidth: "50%", width: "50%" }}
         onClick={() => {
           setInView("MoviesBox");
@@ -57,7 +67,11 @@ function BottomBar(props) {
         value="nominees"
         icon={
           <Badge color="secondary" variant="dot" invisible={!badgeShown}>
-            <CameraRollIcon className={classes.icon} />
+            <CameraRollIcon
+              className={
+                inView === "NominatedBox" ? classes.iconActive : classes.icon
+              }
+            />
           </Badge>
         }
         style={{ minWidth: "50%", maxWidth: "50%", width: "50%" }}

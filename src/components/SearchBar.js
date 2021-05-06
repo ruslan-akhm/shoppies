@@ -35,7 +35,7 @@ function SearchBar() {
 
   const search = e => {
     e.preventDefault();
-    //show loading if user still typing
+    //show loading if user is still typing
     if (!loading) {
       dispatch({ type: LOAD_DATA });
     }

@@ -15,7 +15,7 @@ export const initialState = {
   searchResult: [],
   moviesShown: 0,
   totalResults: 0,
-  nominated: JSON.parse(localStorage.getItem("nominatedMovies"))
+  nominated: localStorage.getItem("nominatedMovies")
     ? JSON.parse(localStorage.getItem("nominatedMovies"))
     : [],
 };
@@ -104,6 +104,7 @@ export const MovieReducer = (state = initialState, action) => {
       };
 
     case REMOVE_NOMINEE:
+      //updating nominees list after user removes a movie from nominated
       const updatedNominated = state.nominated.filter(movie => {
         return movie.imdbID !== payload.movie.imdbID;
       });

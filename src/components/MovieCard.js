@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
@@ -14,6 +14,7 @@ import {
   Button,
   Link,
   Fade,
+  Grow,
 } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
@@ -39,8 +40,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     fontSize: "18px",
     fontWeight: "600",
-
     marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   movieCard: {
     marginBottom: theme.spacing(3),
@@ -59,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     height: "100%",
     maxHeight: "300px",
-    minHeight: "180px",
+    minHeight: "200px",
     objectFit: "cover",
     [theme.breakpoints.down("sm")]: {
       maxHeight: "320px",
@@ -149,10 +150,12 @@ function MovieCard(props) {
           )}
         </Grid>
         {caller === "MoviesBox" && movie.nominated ? (
-          <Typography className={classes.bottomMessage}>
-            You have nominated this movie{" "}
-            <DoneOutlineOutlinedIcon fontSize="inherit" />
-          </Typography>
+          <Grow in={caller === "MoviesBox" && movie.nominated}>
+            <Typography className={classes.bottomMessage}>
+              You have nominated this movie{" "}
+              <DoneOutlineOutlinedIcon fontSize="inherit" />
+            </Typography>
+          </Grow>
         ) : null}
       </Grid>
     </Fade>

@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
-import { Box } from "@material-ui/core";
+import { useContext } from "react";
 import SearchBar from "../SearchBar";
 import MoviesBox from "../desktop/MoviesBox";
 import NominatedBox from "../desktop/NominatedBox";
 import { UserContext } from "../../context/UserContext";
+
+import { Box } from "@material-ui/core";
 
 function MobileBox(props) {
   const { inView } = useContext(UserContext);

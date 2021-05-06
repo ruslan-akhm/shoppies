@@ -1,4 +1,3 @@
-import React from "react";
 import SearchBar from "../components/SearchBar";
 import MoviesBox from "../components/desktop/MoviesBox";
 import NominatedBox from "../components/desktop/NominatedBox";
@@ -16,6 +15,9 @@ const useStyles = makeStyles(theme => ({
     padding: "5vh",
     paddingBottom: "10vh",
     backgroundColor: theme.palette.background.main,
+    [theme.breakpoints.down("sm")]: {
+      paddingBottom: "15vh",
+    },
   },
 }));
 
@@ -28,7 +30,7 @@ function Landing(props) {
           <SearchBar />
         </Grid>
         <Grid item container direction="row" justify="center">
-          <Grid item lg={6} md={6} sm={12} xs={12}>
+          <Grid item lg={6} md={6}>
             <MoviesBox />
           </Grid>
           <Grid item lg={6} md={6}>

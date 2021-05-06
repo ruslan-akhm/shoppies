@@ -13,7 +13,7 @@ import {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,
+      staleTime: 300000, //cache is stored for 5 min
     },
   },
 });
@@ -26,22 +26,16 @@ export const getData = async (dispatch, payload) => {
     // replace spaces with dashes in order to get correct results
     const movie = payload.searchQuery.replace(/\s/g, "-");
     //Saving fetched data in cache for 5min
-    const data = await queryClient.fetchQuery(
-      movie,
-      async () => {
-        try {
-          const resp = await axios.get(
-            `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
-          );
-          return resp;
-        } catch (err) {
-          return console.log(err);
-        }
-      },
-      {
-        staleTime: 300000, //5 min
+    const data = await queryClient.fetchQuery(movie, async () => {
+      try {
+        const resp = await axios.get(
+          `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
+        );
+        return resp;
+      } catch (err) {
+        return console.log(err);
       }
-    );
+    });
 
     //if there are no movies found
     if (data.data.Response === "False") {
@@ -76,24 +70,18 @@ export const loadNextPage = async (dispatch, payload) => {
     });
     //Saving fetched data in cache for 5min
     const queryKey = payload.searchQuery + (payload.moviesShown / 10 + 1); //unique key for every page
-    const data = await queryClient.fetchQuery(
-      queryKey,
-      async () => {
-        try {
-          const resp = await axios.get(
-            `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
-              payload.moviesShown / 10 + 1
-            }&apikey=${key}`
-          );
-          return resp;
-        } catch (err) {
-          return console.log(err);
-        }
-      },
-      {
-        staleTime: 300000, // 5 min
+    const data = await queryClient.fetchQuery(queryKey, async () => {
+      try {
+        const resp = await axios.get(
+          `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
+            payload.moviesShown / 10 + 1
+          }&apikey=${key}`
+        );
+        return resp;
+      } catch (err) {
+        return console.log(err);
       }
-    );
+    });
 
     return dispatch({
       type: LOAD_NEXT_PAGE_SUCCESS,
