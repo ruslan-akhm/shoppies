@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
@@ -15,68 +15,89 @@ import {
   Link,
   Fade,
   Grow,
+  useTheme,
+  useMediaQuery,
 } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
 
 const useStyles = makeStyles(theme => ({
-  bottomMessage: {
-    width: "100%",
-    textAlign: "center",
-    paddingTop: theme.spacing(1),
-    color: theme.palette.green.main,
-  },
-  cardInfo: {
-    padding: theme.spacing(2),
-  },
   cardTitle: {
-    height: "fit-content",
+    position: "absolute",
+    maxWidth: "85%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    height: "auto",
     color: "#fff",
-  },
-  link: {
-    width: "fit-content",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: "18px",
+    backgroundColor: theme.palette.solidGray.main,
+    zIndex: "1",
     fontWeight: "600",
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(2),
+    borderRadius: "4px",
+    textAlign: "center",
+    wordBreak: "break-word",
+    [theme.breakpoints.up("md")]: {
+      top: theme.spacing(1),
+    },
+    [theme.breakpoints.down("sm")]: {
+      top: theme.spacing(-2),
+      maxWidth: "85%",
+      width: "85%",
+    },
   },
   movieCard: {
-    marginBottom: theme.spacing(3),
-    border: `1px solid ${theme.palette.solidGray.main}`,
+    position: "relative",
+    marginBottom: theme.spacing(5),
+    marginTop: theme.spacing(2),
+    paddingLeft: theme.spacing(0.5),
+    paddingRight: theme.spacing(0.5),
+    [theme.breakpoints.down("sm")]: {
+      minHeight: "250px",
+      height: "45vh",
+    },
     [theme.breakpoints.down("xs")]: {
-      flexDirection: "column !important",
+      height: "30vh",
     },
   },
   button: {
-    marginTop: "auto",
-    [theme.breakpoints.down("xs")]: {
-      marginTop: theme.spacing(3),
+    position: "absolute",
+    [theme.breakpoints.up("md")]: {
+      bottom: theme.spacing(1),
+    },
+
+    [theme.breakpoints.down("sm")]: {
+      bottom: theme.spacing(-1),
+      width: "80%",
     },
   },
   poster: {
-    width: "100%",
+    width: "auto",
+    maxWidth: "95%",
     height: "100%",
-    maxHeight: "300px",
-    minHeight: "200px",
     objectFit: "cover",
-    [theme.breakpoints.down("sm")]: {
-      maxHeight: "320px",
-      height: "320px",
-      objectPosition: "top",
+    [theme.breakpoints.up("md")]: {
+      height: "40vh",
     },
+    [theme.breakpoints.down("sm")]: {
+      objectPosition: "top center",
+    },
+  },
+  posterFilter: {
+    filter: "saturate(0.7) opacity(0.85) brightness(95%)",
   },
 }));
 
 function MovieCard(props) {
   const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
   const { setMaxReachedModal } = useContext(UserContext);
   const dispatch = useContext(MovieDispatchContext);
   const { nominated } = useContext(MovieStateContext);
+  const [hoverPoster, setHoverPoster] = useState(false);
 
   const { movie, index, caller } = props;
+
+  //console.log(matches);
 
   const nominate = e => {
     if (nominated.length === 5) {
@@ -93,70 +114,49 @@ function MovieCard(props) {
     <Fade in={index >= 0} key={movie.imdbID}>
       <Grid
         item
+        xl={caller === "MoviesBox" ? 3 : 2}
+        lg={caller === "MoviesBox" ? 3 : 2}
+        md={caller === "MoviesBox" ? 3 : 2}
+        sm={4}
+        xs={4}
         container
+        direction="column"
         className={classes.movieCard}
-        direction="row"
-        lg={12}
-        md={12}
+        justify="center"
+        alignItems="center"
       >
-        <Grid item lg={3} md={3} sm={4}>
-          <img
-            className={classes.poster}
-            src={movie.Poster === "N/A" ? defaultPoster : movie.Poster}
-            alt={movie.Title + " poster"}
-          />
-        </Grid>
-        <Grid
-          item
-          container
-          direction="column"
-          lg={9}
-          md={9}
-          sm={8}
-          className={classes.cardInfo}
-        >
-          <Typography className={classes.cardTitle} variant="h5">
-            {movie.Title} ({movie.Year})
+        <Grid item className={classes.cardTitle}>
+          <Typography variant="subtitle2">
+            {movie.Title}, {movie.Year}
           </Typography>
-          {caller === "MoviesBox" ? (
-            <Link
-              href={"https://www.imdb.com/title/" + movie.imdbID}
-              target="_blank"
-              rel="noopener"
-              className={classes.link}
-            >
-              imdb <OpenInNewIcon fontSize="inherit" />
-            </Link>
-          ) : null}
-          {caller === "MoviesBox" ? (
+        </Grid>
+        <img
+          className={classes.poster + " " + classes.posterFilter}
+          src={movie.Poster === "N/A" ? defaultPoster : movie.Poster}
+          alt={movie.Title + " poster"}
+        />
+
+        {caller === "MoviesBox" ? (
+          !movie.nominated && (
             <Button
               variant="contained"
               color="primary"
               onClick={e => nominate(movie)}
-              disabled={movie.nominated ? true : false}
               className={classes.button}
             >
               Nominate
             </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={e => remove(movie)}
-              className={classes.button}
-            >
-              Remove
-            </Button>
-          )}
-        </Grid>
-        {caller === "MoviesBox" && movie.nominated ? (
-          <Grow in={caller === "MoviesBox" && movie.nominated}>
-            <Typography className={classes.bottomMessage}>
-              You have nominated this movie{" "}
-              <DoneOutlineOutlinedIcon fontSize="inherit" />
-            </Typography>
-          </Grow>
-        ) : null}
+          )
+        ) : (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={e => remove(movie)}
+            className={classes.button}
+          >
+            Remove
+          </Button>
+        )}
       </Grid>
     </Fade>
   );

@@ -15,9 +15,7 @@ export const initialState = {
   searchResult: [],
   moviesShown: 0,
   totalResults: 0,
-  nominated: localStorage.getItem("nominatedMovies")
-    ? JSON.parse(localStorage.getItem("nominatedMovies"))
-    : [],
+  nominated: JSON.parse(localStorage.getItem("nominatedMovies")) || [],
 };
 
 export const MovieReducer = (state = initialState, action) => {

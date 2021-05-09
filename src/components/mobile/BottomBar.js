@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     height: "fit-content",
     backgroundColor: theme.palette.solidGray.main,
+    zIndex: "10",
   },
   icon: {
     fill: theme.palette.lightGray.main,
@@ -30,8 +31,10 @@ const useStyles = makeStyles(theme => ({
 
 function BottomBar(props) {
   const classes = useStyles();
-  const [badgeShown, setBadgeShown] = useState(false);
-  const { inView, setInView } = useContext(UserContext);
+
+  const { inView, setInView, badgeShown, setBadgeShown } = useContext(
+    UserContext
+  );
   const { nominated } = useContext(MovieStateContext);
   const nominatedRef = useRef(nominated.length);
 
@@ -77,7 +80,6 @@ function BottomBar(props) {
         style={{ minWidth: "50%", maxWidth: "50%", width: "50%" }}
         onClick={() => {
           setInView("NominatedBox");
-          setBadgeShown(false);
         }}
       />
     </BottomNavigation>

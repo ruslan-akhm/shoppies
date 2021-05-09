@@ -1,11 +1,11 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useRef } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
 } from "../../context/MovieContext";
 import { UserContext } from "../../context/UserContext";
 import { loadNextPage } from "../../actions/Movies";
-import ModalBox from "./ModalBox";
+import ModalBox from "../ModalBox";
 
 import {
   makeStyles,
@@ -49,16 +49,19 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
   moviesBox: {
-    padding: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(1),
-    },
+    //border: "1px solid red",
+    marginTop: theme.spacing(2),
+    //maxWidth: "100%",
+    paddingBottom: theme.spacing(3),
+    //[theme.breakpoints.down("sm")]: {
+    //  padding: theme.spacing(1),
+    //},
   },
 }));
 
 function MoviesBox(props) {
   const classes = useStyles();
-  const { setMaxReachedModal } = useContext(UserContext);
+  const { setMaxReachedModal, showMovies } = useContext(UserContext);
   const dispatch = useContext(MovieDispatchContext);
   const {
     loading,
@@ -69,9 +72,11 @@ function MoviesBox(props) {
     moviesShown,
     nominated,
   } = useContext(MovieStateContext);
+  const initRender = useRef(true);
 
   useEffect(() => {
-    nominated.length === 5 && setMaxReachedModal(true);
+    !initRender.current && nominated.length === 5 && setMaxReachedModal(true);
+    initRender.current = false;
   }, [nominated]);
 
   const loadMore = () => {
@@ -84,13 +89,11 @@ function MoviesBox(props) {
   return (
     <Grid
       container
-      direction="column"
+      direction="row"
       alignItems="center"
+      justify="flex-start"
       className={classes.moviesBox}
     >
-      <Typography className={classes.boxTitle}>
-        Results for: {searchQuery}
-      </Typography>
       {searchResult &&
         searchResult.map((movie, index) => {
           return (

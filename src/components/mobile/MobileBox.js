@@ -3,25 +3,39 @@ import SearchBar from "../SearchBar";
 import MoviesBox from "../desktop/MoviesBox";
 import NominatedBox from "../desktop/NominatedBox";
 import { UserContext } from "../../context/UserContext";
+import logo from "../../img/logo.png";
 
-import { Box } from "@material-ui/core";
+import { makeStyles, Grid } from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+  logo: {
+    width: "auto",
+    margin: "auto",
+    height: theme.spacing(6),
+
+    marginTop: theme.spacing(1),
+  },
+}));
 
 function MobileBox(props) {
-  const { inView } = useContext(UserContext);
+  const classes = useStyles();
+  const { inView, inputFocused } = useContext(UserContext);
 
   return (
-    <Box>
+    <Grid container direction="column" style={{ boxSizing: "border-box" }}>
       {inView === "MoviesBox" ? (
         <>
-          <SearchBar />
+          <Grid item container direction="row">
+            <SearchBar />
+          </Grid>
           <MoviesBox />
         </>
       ) : (
-        <>
+        <Grid item>
           <NominatedBox />
-        </>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }
 

@@ -5,7 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-y: scroll; /* Show vertical scrollbar */
+  /*overflow-y: scroll; /* Show vertical scrollbar */
+  overflow-x: none;
 }
 
 code {

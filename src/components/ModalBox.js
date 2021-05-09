@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../context/UserContext";
 
 import {
   makeStyles,
@@ -11,26 +11,35 @@ import {
   Button,
   IconButton,
   Slide,
+  Hidden,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles(theme => ({
   actions: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    paddingBottom: theme.spacing(4),
   },
-  closeButton: {
-    position: "absolute",
-    top: theme.spacing(1),
-    right: theme.spacing(1),
-  },
+
   content: {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(5),
   },
   dialog: {
-    padding: theme.spacing(1),
-    position: "relative",
+    padding: "0 !important",
+    "& .MuiDialog-paper": {
+      margin: "0",
+    },
+    "& .MuiDialog-scrollPaper": {
+      alignItems: "flex-end",
+
+      padding: "0",
+    },
+    "& .MuiDialog-paperWidthSm": {
+      maxWidth: "100%",
+      width: "100%",
+    },
   },
 }));
 
@@ -40,7 +49,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function ModalBox(props) {
   const classes = useStyles();
-  const { maxReachedModal, setMaxReachedModal } = useContext(UserContext);
+  const { maxReachedModal, setMaxReachedModal, setInView } = useContext(
+    UserContext
+  );
+
   return (
     <Dialog
       onClose={() => setMaxReachedModal(false)}
@@ -49,15 +61,8 @@ function ModalBox(props) {
       className={classes.dialog}
       TransitionComponent={Transition}
     >
-      <DialogTitle id="dialog-title">
+      <DialogTitle id="dialog-title" className={classes.title}>
         Maximum nominees
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={() => setMaxReachedModal(false)}
-        >
-          <CloseIcon />
-        </IconButton>
       </DialogTitle>
       <DialogContent className={classes.content}>
         <Typography>
@@ -65,6 +70,18 @@ function ModalBox(props) {
         </Typography>
       </DialogContent>
       <DialogActions className={classes.actions}>
+        <Hidden mdUp>
+          <Button
+            onClick={() => {
+              setMaxReachedModal(false);
+              setInView("NominatedBox");
+            }}
+            variant="contained"
+            color="primary"
+          >
+            See Nominees
+          </Button>
+        </Hidden>
         <Button
           onClick={() => setMaxReachedModal(false)}
           variant="outlined"
@@ -72,7 +89,6 @@ function ModalBox(props) {
         >
           Got it!
         </Button>
-        <IconButton></IconButton>
       </DialogActions>
     </Dialog>
   );
