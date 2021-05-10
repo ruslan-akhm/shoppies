@@ -13,6 +13,8 @@ nomination. When they've selected 5 nominees they should be notified they're fin
 - View the list of films already nominated
 - Remove a nominee from the nomination list
 
+**Demo**: Live demo can be found on [Netlify](https://6098ac3862b6b2ed7252c60d--dazzling-lewin-372c93.netlify.app/)
+
 ## Tech Stack
 
 - React.js
