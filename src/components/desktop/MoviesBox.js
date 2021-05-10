@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
@@ -30,9 +30,14 @@ const useStyles = makeStyles(theme => ({
   loadButton: {
     backgroundColor: theme.palette.solidGray.main,
     color: "#fff",
+    margin: "auto",
+    width: "50%",
     "&:hover": {
       backgroundColor: theme.palette.lightGray.main,
       color: theme.palette.solidGray.main,
+    },
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: theme.spacing(5),
     },
   },
   loadingBox: {
@@ -49,19 +54,14 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
   moviesBox: {
-    //border: "1px solid red",
     marginTop: theme.spacing(2),
-    //maxWidth: "100%",
     paddingBottom: theme.spacing(3),
-    //[theme.breakpoints.down("sm")]: {
-    //  padding: theme.spacing(1),
-    //},
   },
 }));
 
 function MoviesBox(props) {
   const classes = useStyles();
-  const { setMaxReachedModal, showMovies } = useContext(UserContext);
+  const { setMaxReachedModal } = useContext(UserContext);
   const dispatch = useContext(MovieDispatchContext);
   const {
     loading,
@@ -75,6 +75,8 @@ function MoviesBox(props) {
   const initRender = useRef(true);
 
   useEffect(() => {
+    //modal is shown when 5th nominee added. If we navigate to nominees (in mobile) and return back
+    //to movies box - we won't see modal on the 1st render (while having 5 nominees), because of the initRender ref
     !initRender.current && nominated.length === 5 && setMaxReachedModal(true);
     initRender.current = false;
   }, [nominated]);
@@ -87,47 +89,51 @@ function MoviesBox(props) {
   };
 
   return (
-    <Grid
-      container
-      direction="row"
-      alignItems="center"
-      justify="flex-start"
-      className={classes.moviesBox}
-    >
-      {searchResult &&
-        searchResult.map((movie, index) => {
-          return (
-            <MovieCard
-              movie={movie}
-              index={index}
-              key={index}
-              caller="MoviesBox"
-            />
-          );
-        })}
-      <Grid item>
-        {!loading && totalResults && +totalResults > moviesShown ? (
-          <Button
-            onClick={loadMore}
-            className={classes.loadButton}
-            variant="contained"
-          >
-            Load more
-          </Button>
+    <>
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justify="flex-start"
+        id="movies-box"
+        className={classes.moviesBox}
+      >
+        {searchResult &&
+          searchResult.map((movie, index) => {
+            return (
+              <MovieCard
+                movie={movie}
+                index={index}
+                key={index}
+                caller="MoviesBox"
+              />
+            );
+          })}
+        {/* <Grid item> */}
+
+        {/* </Grid> */}
+        {loading && (
+          <Box className={classes.loadingBox}>
+            <CircularProgress color="primary" />
+          </Box>
+        )}
+        {error && searchQuery.length !== 0 ? (
+          <Typography className={classes.message}>
+            Try narrowing down the search
+          </Typography>
         ) : null}
+        <ModalBox />
       </Grid>
-      {loading && (
-        <Box className={classes.loadingBox}>
-          <CircularProgress color="primary" />
-        </Box>
-      )}
-      {error && searchQuery.length !== 0 ? (
-        <Typography className={classes.message}>
-          Try narrowing down the search
-        </Typography>
+      {!loading && totalResults && +totalResults > moviesShown ? (
+        <Button
+          onClick={loadMore}
+          className={classes.loadButton}
+          variant="contained"
+        >
+          Load more
+        </Button>
       ) : null}
-      <ModalBox />
-    </Grid>
+    </>
   );
 }
 

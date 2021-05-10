@@ -9,11 +9,9 @@ import {
   Typography,
   DialogActions,
   Button,
-  IconButton,
   Slide,
   Hidden,
 } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles(theme => ({
   actions: {

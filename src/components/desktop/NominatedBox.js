@@ -37,7 +37,7 @@ function NominatedBox(props) {
 
   useEffect(() => {
     setBadgeShown(false);
-  });
+  }, []);
 
   return (
     <Grid

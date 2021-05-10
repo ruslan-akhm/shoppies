@@ -1,4 +1,4 @@
-import { useState, useContext, useRef, useEffect } from "react";
+import { useContext, useRef, useEffect } from "react";
 import CameraRollIcon from "@material-ui/icons/CameraRoll";
 import { MovieStateContext } from "../../context/MovieContext";
 import { UserContext } from "../../context/UserContext";

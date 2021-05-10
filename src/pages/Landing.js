@@ -1,8 +1,15 @@
+import { useContext, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import MoviesBox from "../components/desktop/MoviesBox";
 import NominatedBox from "../components/desktop/NominatedBox";
 import BottomBar from "../components/mobile/BottomBar";
 import MobileBox from "../components/mobile/MobileBox";
+import { loadNextPage } from "../actions/Movies";
+import { UserContext } from "../context/UserContext";
+import {
+  MovieStateContext,
+  MovieDispatchContext,
+} from "../context/MovieContext";
 
 import {
   makeStyles,
@@ -11,9 +18,6 @@ import {
   ClickAwayListener,
   Typography,
 } from "@material-ui/core";
-import { useContext, useEffect } from "react";
-import { UserContext } from "../context/UserContext";
-import { MovieStateContext } from "../context/MovieContext";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   moviesBoxContainer: {
+    boxShadow: `0px 4px 10px 10px ${theme.palette.lightGray.main}`,
     position: "absolute",
     top: theme.spacing(8),
     right: "0",
@@ -62,8 +67,25 @@ const useStyles = makeStyles(theme => ({
 
 function Landing(props) {
   const classes = useStyles();
+  const dispatch = useContext(MovieDispatchContext);
+  const { moviesShown, searchQuery } = useContext(MovieStateContext);
   const { showMovies, setShowMovies } = useContext(UserContext);
-  const { searchQuery } = useContext(MovieStateContext);
+
+  useEffect(() => {
+    if (showMovies && searchQuery && moviesShown > 0) {
+      if (document.getElementById("movies-box") !== null) {
+        const box = document.getElementById("movies-box");
+        box.addEventListener("scroll", () => {
+          if (box.scrollTop > box.scrollHeight * 0.6) {
+            loadNextPage(dispatch, {
+              moviesShown: moviesShown,
+              searchQuery: searchQuery,
+            });
+          }
+        });
+      }
+    }
+  }, [showMovies, searchQuery, moviesShown]);
 
   const handleClickAway = () => {
     setShowMovies(false);
@@ -71,11 +93,11 @@ function Landing(props) {
 
   return (
     <Grid container direction="column" className={classes.landing}>
+      {/*Desktop Layout*/}
       <Hidden smDown>
         <ClickAwayListener onClickAway={handleClickAway}>
           <Grid item container className={classes.wrapper}>
             <SearchBar />
-
             {showMovies ? (
               <Grid
                 id="movies-box"
@@ -92,11 +114,11 @@ function Landing(props) {
             ) : null}
           </Grid>
         </ClickAwayListener>
-
         <Grid item xl={12} lg={12} md={12}>
           <NominatedBox />
         </Grid>
       </Hidden>
+      {/*Mobile Layout*/}
       <Hidden mdUp>
         <MobileBox />
         <BottomBar />

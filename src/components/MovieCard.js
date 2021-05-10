@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
@@ -7,23 +7,12 @@ import { UserContext } from "../context/UserContext";
 import { nominateMovie, removeNominee } from "../actions/Movies";
 import defaultPoster from "../img/defaultPoster.png";
 
-import {
-  makeStyles,
-  Grid,
-  Typography,
-  Button,
-  Link,
-  Fade,
-  Grow,
-  useTheme,
-  useMediaQuery,
-} from "@material-ui/core";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import DoneOutlineOutlinedIcon from "@material-ui/icons/DoneOutlineOutlined";
+import { makeStyles, Grid, Typography, Button, Fade } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   cardTitle: {
     position: "absolute",
+    top: theme.spacing(-2),
     maxWidth: "85%",
     paddingLeft: "5px",
     paddingRight: "5px",
@@ -35,11 +24,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "4px",
     textAlign: "center",
     wordBreak: "break-word",
-    [theme.breakpoints.up("md")]: {
-      top: theme.spacing(1),
-    },
     [theme.breakpoints.down("sm")]: {
-      top: theme.spacing(-2),
       maxWidth: "85%",
       width: "85%",
     },
@@ -60,12 +45,8 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     position: "absolute",
-    [theme.breakpoints.up("md")]: {
-      bottom: theme.spacing(1),
-    },
-
+    bottom: theme.spacing(-1),
     [theme.breakpoints.down("sm")]: {
-      bottom: theme.spacing(-1),
       width: "80%",
     },
   },
@@ -88,18 +69,14 @@ const useStyles = makeStyles(theme => ({
 
 function MovieCard(props) {
   const classes = useStyles();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
   const { setMaxReachedModal } = useContext(UserContext);
   const dispatch = useContext(MovieDispatchContext);
   const { nominated } = useContext(MovieStateContext);
-  const [hoverPoster, setHoverPoster] = useState(false);
 
   const { movie, index, caller } = props;
 
-  //console.log(matches);
-
   const nominate = e => {
+    //show pop-up modal if there are already 5 movies nominated
     if (nominated.length === 5) {
       return setMaxReachedModal(true);
     }

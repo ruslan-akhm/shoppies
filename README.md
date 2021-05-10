@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# Shoppies by Shopify
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+## Project
 
-In the project directory, you can run:
+**About**:
+A webpage that can search OMDB for movies, and allow the user to save their favourite films they feel should be up for
+nomination. When they've selected 5 nominees they should be notified they're finished.
 
-### `npm start`
+**Goals**:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Search OMDB and display the results (movies only)
+- Add a movie from the search results to our nomination list
+- View the list of films already nominated
+- Remove a nominee from the nomination list
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+- React.js
+- Material UI
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Implementation
 
-### `npm run build`
+The decision was made to build the app with React + Material UI. It is a single page app (SPA) so it has no actual navigation,
+but in case such would be in demand - a React Router would be chosen. API calls are performed in async functions and utilized by Axios library. OMDB API key was not put into .env file as it is not considered to be sensitive data. Major implementation parts are as following:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Folder Structure**:
+Major folders are:
+**/actions** - holding action types and functions;
+**/components** - with desktop and mobile components separated;
+**/context** - storing 2 separate contexts;
+**/img** - storing images;
+**/pages** - holding Landing page;
+**/reducers** - an actual reducer;
+**/themes** - Material UI custom theme;
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**State management**:
+State managed with React Hooks, in particulat with Context and useReducer. Context separated into 2 separate contexts: 1)API calls and corresponding loading states/errors handling. This context is fully managed by useReducer and dispatch function; 2)UX and other user actions context. Some components are managed locally via useState and useEffect and do not require their state(s) in any other components.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    Nominated movies are as well stored in localStorage so if the page is closed - all the movies nominated previously are kept and will be shown during next page visit.
 
-### `npm run eject`
+**Design**:
+While prioritizing UX, some UI design was also added. Initial design:
+![Initial_Design](https://cdn.glitch.com/4a049e39-a1a0-4bed-b731-e02f4eeb241d%2FDesign1.jpg?v=1620612023611)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    It was decided to change the layout and also add mobile layout. Insipiration taken from: [Imdb](https://imdb.com/), [Nextflix](https://www.netflix.com/), [Kinopoisk.ru](https://www.kinopoisk.ru/) and from [Pinterest User](https://pinterest.com/ksioks/), especial with this design:
+    ![Pinterest_Design](https://i.pinimg.com/originals/f9/9c/4b/f99c4bbd6a6121d20732c958836b46c9.jpg)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    Currently application looks like this:
+    ![Updated_Design](https://cdn.glitch.com/4a049e39-a1a0-4bed-b731-e02f4eeb241d%2FDesign2.jpg?v=1620612804128)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**Mobile**
+Mobile Layout was added and is handled by Material UI built in screen size points and custom components for mobile view.
+![Design_Mobile](https://cdn.glitch.com/4a049e39-a1a0-4bed-b731-e02f4eeb241d%2FDesign3.jpg?v=1620612973394)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**Challanges & Solutions**
+Since there is no "Search" button, an API call should be done when user inputs a movie title. setTimeout was used to control function call for 2 reasons: 1)to prevent calling dispatch too often (basically at every new letter user types); 2) to prevent API call spaming Omdb resource.
 
-## Learn More
+    Movie databases are very often updated (e.g. if we type "Harry Potter" in search bar every hour, it is highly likely that it will give us same results every time). So cache was implemented with React-query. Cache is set for 5 minutes.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Highlights
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- On mobile view a navigation bar is located at the bottom for easier navigation. Plus a badge pops up every time new movie is nominated
+- Search bar on mobile view is positioned as "sticky" so it is always in view and user doesn't have to scroll al the way up.
+- On desktop version movies upload automatically on scroll event with native JS.
+- Small and simple logo was created in Figma.
 
-### Code Splitting
+## Run locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```sh
+$ git clone https://github.com/ruslan-akhm/shoppies.git
+$ cd shoppies
+$ npm install
+$ npm start
+```

@@ -3,7 +3,6 @@ import SearchBar from "../SearchBar";
 import MoviesBox from "../desktop/MoviesBox";
 import NominatedBox from "../desktop/NominatedBox";
 import { UserContext } from "../../context/UserContext";
-import logo from "../../img/logo.png";
 
 import { makeStyles, Grid } from "@material-ui/core";
 
@@ -12,20 +11,31 @@ const useStyles = makeStyles(theme => ({
     width: "auto",
     margin: "auto",
     height: theme.spacing(6),
-
     marginTop: theme.spacing(1),
+  },
+  searchBarWrapper: {
+    paddingBottom: theme.spacing(1),
+    position: "sticky",
+    top: "0",
+    zIndex: "3",
+    backgroundColor: theme.palette.background.main,
   },
 }));
 
 function MobileBox(props) {
   const classes = useStyles();
-  const { inView, inputFocused } = useContext(UserContext);
+  const { inView } = useContext(UserContext);
 
   return (
-    <Grid container direction="column" style={{ boxSizing: "border-box" }}>
+    <Grid container direction="column">
       {inView === "MoviesBox" ? (
         <>
-          <Grid item container direction="row">
+          <Grid
+            item
+            container
+            direction="row"
+            className={classes.searchBarWrapper}
+          >
             <SearchBar />
           </Grid>
           <MoviesBox />

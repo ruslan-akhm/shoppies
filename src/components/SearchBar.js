@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   MovieStateContext,
   MovieDispatchContext,
@@ -6,11 +6,10 @@ import {
 import { getData } from "../actions/Movies";
 import { LOAD_DATA } from "../actions/Types";
 import { UserContext } from "../context/UserContext";
+import logo from "../img/logo.png";
 
 import { makeStyles, Grid, TextField, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-
-import logo from "../img/logo.png";
 
 const useStyles = makeStyles(theme => ({
   icon: {
@@ -53,9 +52,7 @@ function SearchBar() {
   const classes = useStyles();
   const dispatch = useContext(MovieDispatchContext);
   const { loading } = useContext(MovieStateContext);
-  const { inputFocused, setInputFocused, setShowMovies } = useContext(
-    UserContext
-  );
+  const { setInputFocused, setShowMovies } = useContext(UserContext);
 
   const search = e => {
     e.preventDefault();
@@ -108,7 +105,6 @@ function SearchBar() {
           onFocus={e => focus(e)}
           onBlur={() => {
             setInputFocused(false);
-            //setShowMovies(false);
           }}
           className={classes.inputField}
           InputProps={{
