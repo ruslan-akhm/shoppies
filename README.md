@@ -34,7 +34,7 @@ Major folders are:
 **/themes** - Material UI custom theme;
 
 **State management**:
-State managed with React Hooks, in particulat with Context and useReducer. Context separated into 2 separate contexts: 1)API calls and corresponding loading states/errors handling. This context is fully managed by useReducer and dispatch function; 2)UX and other user actions context. Some components are managed locally via useState and useEffect and do not require their state(s) in any other components.
+State managed with React Hooks, in particular with Context and useReducer. Context separated into 2 separate contexts: 1)API calls and corresponding loading states/errors handling. This context is fully managed by useReducer and dispatch function; 2)UX and other user actions context. Some components are managed locally via useState and useEffect and do not require their state(s) in any other components.
 Nominated movies are as well stored in localStorage so if the page is closed - all the movies nominated previously are kept and will be shown during next page visit.
 
 **Design**:
@@ -47,16 +47,16 @@ It was decided to change the layout and also add mobile layout. Insipiration tak
 Currently application looks like this:
 ![Updated_Design](https://cdn.glitch.com/4a049e39-a1a0-4bed-b731-e02f4eeb241d%2FDesign2.jpg?v=1620612804128)
 
-**Mobile**
+**Mobile**:
 Mobile Layout was added and is handled by Material UI built in screen size points and custom components for mobile view.
 ![Design_Mobile](https://cdn.glitch.com/4a049e39-a1a0-4bed-b731-e02f4eeb241d%2FDesign3.jpg?v=1620612973394)
 
-**Challanges & Solutions**
-Since there is no "Search" button, an API call should be done when user inputs a movie title. setTimeout was used to control function call for 2 reasons: 1)to prevent calling dispatch too often (basically at every new letter user types); 2) to prevent API call spaming Omdb resource.
+**Challanges & Solutions**:
+Since there is no "Search" button, an API call should be done when user inputs a movie title. setTimeout was used to control function call for 2 reasons: 1)to prevent calling dispatch too often (basically at every new letter user types); 2) to avoid spamming Omdb resource with API calls.
 
-Movie databases are very often updated (e.g. if we type "Harry Potter" in search bar every hour, it is highly likely that it will give us same results every time). So cache was implemented with React-query. Cache is set for 5 minutes.
+Movie databases are not updated very often (e.g. if we type "Harry Potter" in search bar every hour, it is highly likely that it will give us same results every time). So cache was implemented with React-query. Cache is set for 5 minutes.
 
-## Highlights
+## Other Highlights
 
 - On mobile view a navigation bar is located at the bottom for easier navigation. Plus a badge pops up every time new movie is nominated
 - Search bar on mobile view is positioned as "sticky" so it is always in view and user doesn't have to scroll al the way up.
