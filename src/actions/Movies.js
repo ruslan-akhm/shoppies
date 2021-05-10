@@ -29,7 +29,7 @@ export const getData = async (dispatch, payload) => {
     const data = await queryClient.fetchQuery(movie, async () => {
       try {
         const resp = await axios.get(
-          `http://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
+          `https://www.omdbapi.com/?s=${movie}&type=movie&apikey=${key}`
         );
         return resp;
       } catch (err) {
@@ -73,7 +73,7 @@ export const loadNextPage = async (dispatch, payload) => {
     const data = await queryClient.fetchQuery(queryKey, async () => {
       try {
         const resp = await axios.get(
-          `http://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
+          `https://www.omdbapi.com/?s=${payload.searchQuery}&type=movie&page=${
             payload.moviesShown / 10 + 1
           }&apikey=${key}`
         );
